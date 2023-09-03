@@ -193,6 +193,10 @@
 
    Token value for ``"->"``.
 
+.. data:: FATARROW
+
+   Token value for ``"=>"``.
+
 .. data:: ELLIPSIS
 
    Token value for ``"..."``.
