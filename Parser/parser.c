@@ -14710,7 +14710,7 @@ slice_rule(Parser *p)
 //     | 'None'
 //     | &(STRING | FSTRING_START) strings
 //     | NUMBER
-//     | &'(' (tuple | group | genexp)
+//     | &'(' (lambdarrow | tuple | group | genexp)
 //     | &'[' (list | listcomp)
 //     | &'{' (dict | set | dictcomp | setcomp)
 //     | '...'
@@ -14893,26 +14893,26 @@ atom_rule(Parser *p)
         D(fprintf(stderr, "%*c%s atom[%d-%d]: %s failed!\n", p->level, ' ',
                   p->error_indicator ? "ERROR!" : "-", _mark, p->mark, "NUMBER"));
     }
-    { // &'(' (tuple | group | genexp)
+    { // &'(' (lambdarrow | tuple | group | genexp)
         if (p->error_indicator) {
             p->level--;
             return NULL;
         }
-        D(fprintf(stderr, "%*c> atom[%d-%d]: %s\n", p->level, ' ', _mark, p->mark, "&'(' (tuple | group | genexp)"));
+        D(fprintf(stderr, "%*c> atom[%d-%d]: %s\n", p->level, ' ', _mark, p->mark, "&'(' (lambdarrow | tuple | group | genexp)"));
         void *_tmp_95_var;
         if (
             _PyPegen_lookahead_with_int(1, _PyPegen_expect_token, p, 7)  // token='('
             &&
-            (_tmp_95_var = _tmp_95_rule(p))  // tuple | group | genexp
+            (_tmp_95_var = _tmp_95_rule(p))  // lambdarrow | tuple | group | genexp
         )
         {
-            D(fprintf(stderr, "%*c+ atom[%d-%d]: %s succeeded!\n", p->level, ' ', _mark, p->mark, "&'(' (tuple | group | genexp)"));
+            D(fprintf(stderr, "%*c+ atom[%d-%d]: %s succeeded!\n", p->level, ' ', _mark, p->mark, "&'(' (lambdarrow | tuple | group | genexp)"));
             _res = _tmp_95_var;
             goto done;
         }
         p->mark = _mark;
         D(fprintf(stderr, "%*c%s atom[%d-%d]: %s failed!\n", p->level, ' ',
-                  p->error_indicator ? "ERROR!" : "-", _mark, p->mark, "&'(' (tuple | group | genexp)"));
+                  p->error_indicator ? "ERROR!" : "-", _mark, p->mark, "&'(' (lambdarrow | tuple | group | genexp)"));
     }
     { // &'[' (list | listcomp)
         if (p->error_indicator) {
@@ -15133,7 +15133,7 @@ lambdef_rule(Parser *p)
     return _res;
 }
 
-// lambdarrow: '!' &&'(' params? ')' '=>' expression
+// lambdarrow: '(' params? ')' '=>' expression
 static expr_ty
 lambdarrow_rule(Parser *p)
 {
@@ -15155,33 +15155,30 @@ lambdarrow_rule(Parser *p)
     UNUSED(_start_lineno); // Only used by EXTRA macro
     int _start_col_offset = p->tokens[_mark]->col_offset;
     UNUSED(_start_col_offset); // Only used by EXTRA macro
-    { // '!' &&'(' params? ')' '=>' expression
+    { // '(' params? ')' '=>' expression
         if (p->error_indicator) {
             p->level--;
             return NULL;
         }
-        D(fprintf(stderr, "%*c> lambdarrow[%d-%d]: %s\n", p->level, ' ', _mark, p->mark, "'!' &&'(' params? ')' '=>' expression"));
+        D(fprintf(stderr, "%*c> lambdarrow[%d-%d]: %s\n", p->level, ' ', _mark, p->mark, "'(' params? ')' '=>' expression"));
         Token * _literal;
         Token * _literal_1;
         Token * _literal_2;
-        Token * _literal_3;
         void *a;
         expr_ty b;
         if (
-            (_literal = _PyPegen_expect_token(p, 55))  // token='!'
-            &&
-            (_literal_1 = _PyPegen_expect_forced_token(p, 7, "("))  // forced_token='('
+            (_literal = _PyPegen_expect_token(p, 7))  // token='('
             &&
             (a = params_rule(p), !p->error_indicator)  // params?
             &&
-            (_literal_2 = _PyPegen_expect_token(p, 8))  // token=')'
+            (_literal_1 = _PyPegen_expect_token(p, 8))  // token=')'
             &&
-            (_literal_3 = _PyPegen_expect_token(p, 52))  // token='=>'
+            (_literal_2 = _PyPegen_expect_token(p, 52))  // token='=>'
             &&
             (b = expression_rule(p))  // expression
         )
         {
-            D(fprintf(stderr, "%*c+ lambdarrow[%d-%d]: %s succeeded!\n", p->level, ' ', _mark, p->mark, "'!' &&'(' params? ')' '=>' expression"));
+            D(fprintf(stderr, "%*c+ lambdarrow[%d-%d]: %s succeeded!\n", p->level, ' ', _mark, p->mark, "'(' params? ')' '=>' expression"));
             Token *_token = _PyPegen_get_last_nonnwhitespace_token(p);
             if (_token == NULL) {
                 p->level--;
@@ -15201,7 +15198,7 @@ lambdarrow_rule(Parser *p)
         }
         p->mark = _mark;
         D(fprintf(stderr, "%*c%s lambdarrow[%d-%d]: %s failed!\n", p->level, ' ',
-                  p->error_indicator ? "ERROR!" : "-", _mark, p->mark, "'!' &&'(' params? ')' '=>' expression"));
+                  p->error_indicator ? "ERROR!" : "-", _mark, p->mark, "'(' params? ')' '=>' expression"));
     }
     _res = NULL;
   done:
@@ -31022,7 +31019,7 @@ _tmp_94_rule(Parser *p)
     return _res;
 }
 
-// _tmp_95: tuple | group | genexp
+// _tmp_95: lambdarrow | tuple | group | genexp
 static void *
 _tmp_95_rule(Parser *p)
 {
@@ -31035,6 +31032,25 @@ _tmp_95_rule(Parser *p)
     }
     void * _res = NULL;
     int _mark = p->mark;
+    { // lambdarrow
+        if (p->error_indicator) {
+            p->level--;
+            return NULL;
+        }
+        D(fprintf(stderr, "%*c> _tmp_95[%d-%d]: %s\n", p->level, ' ', _mark, p->mark, "lambdarrow"));
+        expr_ty lambdarrow_var;
+        if (
+            (lambdarrow_var = lambdarrow_rule(p))  // lambdarrow
+        )
+        {
+            D(fprintf(stderr, "%*c+ _tmp_95[%d-%d]: %s succeeded!\n", p->level, ' ', _mark, p->mark, "lambdarrow"));
+            _res = lambdarrow_var;
+            goto done;
+        }
+        p->mark = _mark;
+        D(fprintf(stderr, "%*c%s _tmp_95[%d-%d]: %s failed!\n", p->level, ' ',
+                  p->error_indicator ? "ERROR!" : "-", _mark, p->mark, "lambdarrow"));
+    }
     { // tuple
         if (p->error_indicator) {
             p->level--;

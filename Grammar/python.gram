@@ -852,7 +852,7 @@ atom[expr_ty]:
     | 'None' { _PyAST_Constant(Py_None, NULL, EXTRA) }
     | &(STRING|FSTRING_START) strings
     | NUMBER
-    | &'(' (tuple | group | genexp)
+    | &'(' (lambdarrow | tuple | group | genexp)
     | &'[' (list | listcomp)
     | &'{' (dict | set | dictcomp | setcomp)
     | '...' { _PyAST_Constant(Py_Ellipsis, NULL, EXTRA) }
@@ -869,7 +869,7 @@ lambdef[expr_ty]:
         _PyAST_Lambda((a) ? a : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, EXTRA) }
 
 lambdarrow[expr_ty]:
-    | '!' '(' a=[params] ')' '=>' b=expression {
+    | '(' a=[params] ')' '=>' b=expression {
         _PyAST_Lambda((a) ? a : CHECK(arguments_ty, _PyPegen_empty_arguments(p)), b, EXTRA) }
 
 lambda_params[arguments_ty]:
