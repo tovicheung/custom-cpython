@@ -47,6 +47,7 @@
 
 # needs libm
 @MODULE_MATH_TRUE@math mathmodule.c
+@MODULE_MATH_TRUE@tovi mathmodule_.c
 @MODULE_CMATH_TRUE@cmath cmathmodule.c
 @MODULE__STATISTICS_TRUE@_statistics _statisticsmodule.c
 

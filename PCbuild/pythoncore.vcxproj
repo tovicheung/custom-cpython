@@ -428,6 +428,7 @@
     <ClCompile Include="..\Modules\itertoolsmodule.c" />
     <ClCompile Include="..\Modules\main.c" />
     <ClCompile Include="..\Modules\mathmodule.c" />
+    <ClCompile Include="..\Modules\mathmodule_.c" />
     <ClCompile Include="..\Modules\md5module.c" />
     <ClCompile Include="..\Modules\mmapmodule.c" />
     <ClCompile Include="..\Modules\_opcode.c" />
